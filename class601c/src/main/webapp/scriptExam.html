@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form name="frm" action="" method="post">
+	name : <input type="text" name="empName">
+	<input type="submit" value="전송">
+</form>
+
+<a href="javascript:setName('joo')">joo</a>
+<a href="javascript:setName('kim')">kim</a>
+<a href="javascript:setName('park')">park</a>
+
+<script type="text/javascript">
+	
+	var num = 1;
+	var str = "lion";
+	
+	function addNum(a, b){
+		return a + b;
+	}
+	
+	function setName(name){
+		document.frm.empName.value = name;
+	}
+
+</script>
+</body>
+</html>

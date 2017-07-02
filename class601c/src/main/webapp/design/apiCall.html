@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>API Call test</title>
+<style>
+table, tr, th, td {
+	border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+	<div id="resultList">
+		<table id="listGrid">
+			<thead>
+				<tr>
+					<th>주차장코드</th>
+					<th>주차장명</th>
+					<th>최대주차대수</th>
+					<th>잔여주차가능대수</th>
+					<th>주소</th>
+					<th>전화</th>
+					<th>대표명</th>
+					<th>기관명</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+	</div>
+	
+	<div id="paging">
+		
+	</div>
+
+	<script src="/sample/js/jquery-3.1.1.min.js"></script>
+	<script>
+		$(function() {
+
+			apiCallClick(1);
+
+		});
+
+		function addRowClick(data) {
+			
+			//data.PublicParkingAvaliable.row
+			$('#listGrid tbody').html('');
+			if(data.RESULT){
+				$('#listGrid tbody').append('<tr><td colspan="8">' + data.RESULT.MESSAGE + '</td></tr>')
+			} else {
+				var dataList = data.PublicParkingAvaliable.row;
+				var dataSize = data.PublicParkingAvaliable.row.length;
+				for (var i = 0; i < dataSize; i++) {
+					$('#listGrid tbody').append('<tr>' 
+													+ '<td>' + dataList[i].PARKMASTER_CD +'</td>'
+													+ '<td>' + dataList[i].PARK_NAME +'</td>'
+													+ '<td>' + dataList[i].MAX_PARKING_CNT +'</td>' 
+													+ '<td>' + dataList[i].PARKING_CNT +'</td>' 
+													+ '<td>' + dataList[i].PARK_ADDRESS +'</td>' 
+													+ '<td>' + dataList[i].TEL_NO +'</td>' 
+													+ '<td>' + dataList[i].OWNER_NAME +'</td>' 
+													+ '<td>' + dataList[i].COMPANY_NM +'</td>' 
+											+ '</tr>');
+	
+				}
+					
+					var totalCnt = data.PublicParkingAvaliable.list_total_count;
+					var addtionPage = (totalCnt%10) > 0 ? 1 : 0 ;
+					var pageCnt = parseInt(totalCnt/10) + addtionPage;
+					$('#paging').html('');
+					for(var j=1;j<=pageCnt;j++){
+						$('#paging').append('<a href="javascript:apiCallClick('+j+')">'+j+'</a>');
+					}
+					
+				}
+			}
+
+		function apiCallClick(pageNo) {
+			var startPage = 1;
+			var endPage = 10;
+			var numPerPage = 10;
+			
+			startPage = ((pageNo-1) * numPerPage) + 1;
+			endPage = startPage + (numPerPage - 1);
+			
+			$.ajax({
+				url : '/sample/apiCall/parking.do',
+				type : 'post',
+				datatype : 'json',
+				data : {
+					"startPage": startPage,
+					"endPage" : endPage
+				},
+				success : function(data) {
+					addRowClick(data);
+				},
+				error : function(req, status, error) {
+					alert('서버 에러입니다. 관리자에게 문의해주세요.');
+				}
+			});
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="booking">
+    
+    <resultMap id="bookingMap" type="com.class601.vo.BookingVo">
+        <result property="bookingId" 	column="BOOKING_ID"></result>
+        <result property="bookingSeat" 	column="BOOKING_SEAT"></result>
+        <result property="userId" 		column="USER_ID"></result>
+        <result property="noUId"	 	column="NO_U_ID"></result>
+        <result property="showId" 		column="SHOW_ID"></result>
+        <result property="bookingDate" 	column="BOOKING_DATE"></result>
+        <result property="payId"	 	column="PAY_ID"></result>
+        <result property="payAmnt" 		column="PAY_AMNT"></result>
+        <result property="payDate"	 	column="PAY_DATE"></result>
+        <result property="userNm"	 	column="USER_NM"></result>
+        <result property="userCellphone" column="USER_CELLPHONE"></result>
+        <result property="noUNm"	 	column="NO_U_NM"></result>
+        <result property="noUHp" 		column="NO_U_HP"></result>
+        <result property="movieNm"	 	column="MOVIE_NM"></result>
+        <result property="movieId"	 	column="MOVIE_ID"></result>
+    </resultMap>
+
+	
+    <insert id="insertBookingInfo">
+		INSERT INTO 
+			BOOKING_INFO
+			(
+			BOOKING_ID
+			,BOOKING_SEAT
+			,USER_ID
+			,NO_U_ID
+			,SHOW_ID
+			,BOOKING_DATE
+			)
+		VALUES
+			(
+			#{bookingId}
+			,#{bookingSeat}
+			,#{userId}
+			,#{noUId}
+			,#{showId}
+			,TO_CHAR(SYSDATE)
+			)	
+	</insert>
+	
+    <insert id="insertPayInfo">
+		INSERT INTO 
+			PAY_INFO
+			(
+			PAY_ID
+			,PAY_AMNT
+			,PAY_DATE
+			,USER_ID
+			,NO_U_ID
+			,BOOKING_ID
+			)
+		VALUES
+			(
+			#{payId}
+			,#{payAmnt}
+			,TO_CHAR(SYSDATE)
+			,#{userId}
+			,#{noUId}
+			,#{bookingId}
+			)	
+	</insert>
+	
+    <select id="selectPay" parameterType="bookingVo" resultMap="bookingMap">
+		SELECT PAY.*, M.MOVIE_NM
+		FROM
+		(
+		SELECT PA.*, S.MOVIE_ID
+		FROM
+		(
+		SELECT P.PAY_ID, P.PAY_AMNT, P.PAY_DATE , B.SHOW_ID, U.USER_NM, U.USER_CELLPHONE
+		FROM 
+		  PAY_INFO P
+		  ,BOOKING_INFO B
+		  ,USER_INFO U
+		WHERE
+		  P.BOOKING_ID = B.BOOKING_ID
+		  AND P.USER_ID = U.USER_ID
+		  AND P.PAY_ID = #{payId}
+		) PA
+		, SHOW_INFO S
+		WHERE
+		PA.SHOW_ID = S.SHOW_ID
+		) PAY
+		,MOVIE_INFO M
+		WHERE PAY.MOVIE_ID = M.MOVIE_ID
+    </select>
+
+    <select id="noSelectPay" parameterType="bookingVo" resultMap="bookingMap">
+		SELECT PAY.*, M.MOVIE_NM
+		FROM
+		(
+		SELECT PA.*, S.MOVIE_ID
+		FROM
+		(
+		SELECT P.PAY_ID, P.PAY_AMNT, P.PAY_DATE , B.SHOW_ID, N.NO_U_NM, N.NO_U_HP
+		FROM 
+		  PAY_INFO P
+		  ,BOOKING_INFO B
+		  ,NO_U_INFO N
+		WHERE
+		  P.BOOKING_ID = B.BOOKING_ID
+		  AND P.NO_U_ID = N.NO_U_ID
+		  AND P.PAY_ID = #{payId}
+		) PA
+		, SHOW_INFO S
+		WHERE
+		PA.SHOW_ID = S.SHOW_ID
+		) PAY
+		,MOVIE_INFO M
+		WHERE PAY.MOVIE_ID = M.MOVIE_ID
+    </select>
+    
+    <select id="selectedSeat" parameterType="bookingVo" resultMap="bookingMap">
+        SELECT BOOKING_SEAT 
+        FROM BOOKING_INFO
+		WHERE SHOW_ID = #{showId}
+    </select>
+    
+    <select id="totalBooking" resultType="int">
+        SELECT COUNT(0) 
+        FROM BOOKING_INFO 
+        WHERE BOOKING_DATE = TO_CHAR(SYSDATE)
+    </select>
+    
+    <select id="movieBooking" parameterType="bookingVo" resultType="int">
+    	SELECT COUNT(0)
+		FROM 
+		  BOOKING_INFO B
+		  ,SHOW_INFO S
+		WHERE 
+		  BOOKING_DATE = TO_CHAR(SYSDATE)
+		  AND B.SHOW_ID = S.SHOW_ID
+		  AND S.MOVIE_ID = #{movieId}
+    </select>
+    
+</mapper>

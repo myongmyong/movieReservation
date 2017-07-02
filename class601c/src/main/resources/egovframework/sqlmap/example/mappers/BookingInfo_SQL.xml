@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "bookInfo">
+    
+	 <resultMap id="bookInfo" type="com.class601.vo.BookVo">
+   		<result property="showId" column="SHOW_ID"/>
+		<result property="movieId" column="MOVIE_ID"/>
+		<result property="movieNm" column="MOVIE_NM"/>
+		<result property="theaterId" column="THEATER_ID"/>
+		<result property="theaterNm" column="THEATER_NM"/>
+		<result property="cinemaId" column="CINEMA_ID"/>
+		<result property="cinemaNm" column="CINEMA_NM"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="showDate" column="SHOW_DATE"/>
+		<result property="bookingId" column="BOOKING_ID"/>
+		<result property="bookingSeat" column="BOOKING_SEAT"/>
+		<result property="userId" column="USER_ID"/>
+		<result property="userNm" column="USER_NM"/>	
+	</resultMap>
+	 
+	<select id="bookingInfo" parameterType="bookVo" resultMap="bookInfo">
+			SELECT 
+				B.*
+				,M.MOVIE_ID
+				,M.MOVIE_NM
+				,T.THEATER_NM
+				,C.CINEMA_NM
+			FROM
+			(
+			SELECT BOOKING_ID, SHOW_ID, BOOKING_SEAT
+			FROM BOOKING_INFO
+			WHERE USER_ID = #{userId}	
+			) B
+			,SHOW_INFO S
+			,MOVIE_INFO M
+			,THEATER_INFO T
+			,CINEMA_INFO C
+			WHERE B.SHOW_ID = S.SHOW_ID
+			AND S.MOVIE_ID = M.MOVIE_ID
+			AND S.THEATER_ID = T.THEATER_ID
+			AND S.CINEMA_ID = C.CINEMA_ID
+			AND S.SHOW_DATE <![CDATA[ >= ]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+	 </select>
+	 
+	<select id="bookedInfo" parameterType="bookVo" resultMap="bookInfo">
+			SELECT 
+				B.*
+				,M.MOVIE_ID
+				,M.MOVIE_NM
+				,T.THEATER_NM
+				,C.CINEMA_NM
+			FROM
+			(
+			SELECT BOOKING_ID, SHOW_ID, BOOKING_SEAT
+			FROM BOOKING_INFO
+			WHERE USER_ID = #{userId}
+			) B
+			,SHOW_INFO S
+			,MOVIE_INFO M
+			,THEATER_INFO T
+			,CINEMA_INFO C
+			WHERE B.SHOW_ID = S.SHOW_ID
+			AND S.MOVIE_ID = M.MOVIE_ID
+			AND S.THEATER_ID = T.THEATER_ID
+			AND S.CINEMA_ID = C.CINEMA_ID
+			AND S.SHOW_DATE <![CDATA[ < ]]> TO_CHAR(SYSDATE,'YYYY-MM-DD')
+	 </select>
+	 
+	<select id="bookMovieInfo" parameterType="bookVo" resultMap="bookInfo">
+			SELECT 
+				B.*
+				,M.MOVIE_ID
+				,M.MOVIE_NM
+				,T.THEATER_NM
+				,C.CINEMA_NM
+			FROM
+			(
+			SELECT BOOKING_ID, SHOW_ID, BOOKING_SEAT
+			FROM BOOKING_INFO
+			WHERE 
+				USER_ID = #{userId}
+				AND BOOKING_ID = #{bookingId}	
+			) B
+			,SHOW_INFO S
+			,MOVIE_INFO M
+			,THEATER_INFO T
+			,CINEMA_INFO C
+			WHERE B.SHOW_ID = S.SHOW_ID
+			AND S.MOVIE_ID = M.MOVIE_ID
+			AND S.THEATER_ID = T.THEATER_ID
+			AND S.CINEMA_ID = C.CINEMA_ID   	
+	</select>
+ 
+
+</mapper>

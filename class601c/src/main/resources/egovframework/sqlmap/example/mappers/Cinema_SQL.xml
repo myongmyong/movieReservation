@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cinema">
+
+
+	<resultMap id="cinema" type="com.class601.vo.CinemaVo">
+		<result property="cinemaId" column="CINEMA_ID" />
+		<result property="theaterId" column="THEATER_ID" />
+		<result property="cinemaNm" column="CINEMA_NM" />
+		<result property="cinemaTypeId" column="CINEMA_TYPE_ID" />
+		<result property="cinemaTypeNm" column="CINEMA_TYPE_NM" />
+		<result property="cinemaSeatNum" column="CINEMA_SEAT_NUM" />
+		<result property="cinemaFloorNo" column="CINEMA_FLOOR_NO" />
+	</resultMap>
+
+	<sql id="cinemaId">
+		SELECT
+		C.CINEMA_ID CINEMA_ID
+		,C.THEATER_ID THEATER_ID
+		,C.CINEMA_NM CINEMA_NM
+		,C.CINEMA_TYPE_ID CINEMA_TYPE_ID
+		,CI.CINEMA_TYPE_NM CINEMA_TYPE_NM
+		,C.CINEMA_SEAT_NUM CINEMA_SEAT_NUM
+		,C.CINEMA_FLOOR_NO CINEMA_FLOOR_NO
+		FROM CINEMA_INFO C, CINEMA_TYPE CI
+		WHERE C.CINEMA_TYPE_ID = CI.CINEMA_TYPE_ID AND THEATER_ID = #{theaterId}
+		ORDER BY CINEMA_ID
+		DESC
+	</sql>
+
+
+	<select id="cinemaList" parameterType="cinemaVo" resultMap="cinema">
+		SELECT *
+		FROM (
+		SELECT ROWNUM AS RN, A.*
+		FROM (
+		<include refid="cinemaId" />
+		) A
+		)
+		WHERE ROWNUM <![CDATA[ <= ]]>
+		#{pageSize}
+		AND RN <![CDATA[ > ]]>
+		(#{pageNo}-1)*#{pageSize}
+	</select>
+	
+	<select id="cinemaListCount" parameterType="cinemaVo"
+		resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+		<include refid="cinemaId" />
+		)
+	</select>
+	
+	<select id="cinemaDetailView" parameterType="cinemaVo" resultMap="cinema">
+		SELECT
+		C.CINEMA_ID CINEMA_ID
+		,C.THEATER_ID THEATER_ID
+		,C.CINEMA_NM CINEMA_NM
+		,C.CINEMA_TYPE_ID CINEMA_TYPE_ID
+		,CI.CINEMA_TYPE_NM CINEMA_TYPE_NM
+		,C.CINEMA_SEAT_NUM CINEMA_SEAT_NUM
+		,C.CINEMA_FLOOR_NO CINEMA_FLOOR_NO
+		FROM CINEMA_INFO C, CINEMA_TYPE CI
+		WHERE C.CINEMA_TYPE_ID = CI.CINEMA_TYPE_ID AND CINEMA_ID = #{cinemaId}
+	</select>
+
+	<insert id="cinemaInsert">
+		INSERT INTO CINEMA_INFO(
+		CINEMA_ID
+		,THEATER_ID
+		,CINEMA_NM
+		,CINEMA_TYPE_ID
+		,CINEMA_SEAT_NUM
+		,CINEMA_FLOOR_NO)
+		VALUES(
+		#{cinemaId},
+		#{theaterId}, 
+		#{cinemaNm},
+		#{cinemaTypeId},
+		#{cinemaSeatNum}, 
+		#{cinemaFloorNo}
+		)
+	</insert>
+
+	<update id="cinemaModify">
+		UPDATE CINEMA_INFO
+		SET
+		CINEMA_ID = #{cinemaId}
+		,CINEMA_NM = #{cinemaNm}
+		,CINEMA_TYPE_ID = #{cinemaTypeId}
+		,CINEMA_SEAT_NUM = #{cinemaSeatNum}
+		,CINEMA_FLOOR_NO = #{cinemaFloorNo}
+		,THEATER_ID = #{theaterId}
+		WHERE
+		CINEMA_ID = #{cinemaId}
+	</update>
+
+	<delete id="cinemaDelete">
+		DELETE CINEMA_INFO
+		WHERE 
+		CINEMA_ID = #{cinemaId}
+	</delete>
+	
+	<!-- 특정 극장의 전체 상영관수 계산하는 서비스 -->
+	<select id="countAllCinema" parameterType="String" resultType="int">
+	    SELECT COUNT(0)
+	    FROM CINEMA_INFO
+	    WHERE THEATER_ID = #{theaterId}
+	</select>
+	
+	<select id="countAllSeatNum" parameterType="String" resultType="int">
+	    SELECT SUM(CINEMA_SEAT_NUM)
+	    FROM CINEMA_INFO
+     	GROUP BY THEATER_ID
+      	HAVING THEATER_ID = #{theaterId}
+	</select>
+	    
+		
+</mapper>

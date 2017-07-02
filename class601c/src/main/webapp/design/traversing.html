@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<title>Traversing</title>
+	<script src="/sample/js/jquery-3.1.1.min.js"></script>
+	<style>
+		table, tr, th, td {
+			border: 1px solid black;
+			border-spacing:0px;
+		}
+		
+		.editing {
+			background-color:yellow;
+		}
+	</style>
+</head>
+<body>
+	
+	<table>
+		<tr>
+			<th>순번</th>
+			<th>제목</th>
+			<th>조회수</th>
+			<th>작성자</th>
+			<th>작성일</th>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td> <span>우리나라</span> </td>
+			<td>15</td>
+			<td>기묭</td>
+			<td>2016-10-28</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>      대한민국       </td>
+			<td>53</td>
+			<td>기묭</td>
+			<td>2016-10-28</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>오스트레일리아</td>
+			<td>23</td>
+			<td>기묭</td>
+			<td>2016-10-28</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>불가리아</td>
+			<td>43</td>
+			<td>기묭</td>
+			<td>2016-10-28</td>
+		</tr>
+	</table>
+	
+	<form action="" method="post">
+		<label for="">제목</label> : <input type="text" name="title" id="title" /> 
+		<label for="">작성자</label> : <input type="text" name="writer" id="writer" />
+	</form>
+
+<script>
+	$(function(){
+		
+		$('tr').click(function(){
+			
+			$(this).addClass('editing');
+			var arrTd = $(this).find('td');
+			
+			$('#title').val($(arrTd[1]).text().trim());
+			$('#writer').val($(arrTd[3]).text().trim());
+		});
+		
+	});
+</script>		
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

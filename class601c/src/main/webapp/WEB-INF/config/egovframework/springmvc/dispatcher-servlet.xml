@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+    <context:component-scan base-package="com.class601">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+    
+    <mvc:annotation-driven/>
+
+    <mvc:interceptors>
+        
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/*/*.do"/>
+			<bean id="loginCheckInterceptor" class="com.class601.util.LoginCheckInterceptor"></bean>
+		</mvc:interceptor>
+		 <!--영화 예매시, 내페이지 클릭시, 등등 로그인이 안되어있으면 열 수 없는 페이지 		-->
+		<mvc:interceptor>
+			<mvc:mapping path="/user/booking/selectSeat.do"/>
+			<bean id="userLoginCheckInterceptor" class="com.class601.util.UserLoginCheckInterceptor"></bean>
+		</mvc:interceptor>			
+		
+	</mvc:interceptors>
+    
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="webBindingInitializer">
+            <bean class="egovframework.example.cmmn.web.EgovBindingInitializer"/>
+        </property>
+    </bean>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="localeChangeInterceptor" />
+               
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+    <!-- 쿠키를 이용한 Locale 이용시 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/> -->
+    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="language" />
+    </bean>
+    
+	
+	
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="cmmn/egovError"/>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.dao.DataAccessException">cmmn/dataAccessFailure</prop>
+                <prop key="org.springframework.transaction.TransactionException">cmmn/transactionFailure</prop>
+                <prop key="egovframework.rte.fdl.cmmn.exception.EgovBizException">cmmn/egovError</prop>
+                <prop key="org.springframework.security.AccessDeniedException">cmmn/egovError</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:order="1"
+	    p:viewClass="org.springframework.web.servlet.view.JstlView"
+	    p:prefix="/WEB-INF/jsp/egovframework/example/" p:suffix=".jsp"/>
+
+    <!-- For Pagination Tag -->
+    <bean id="imageRenderer" class="egovframework.example.cmmn.web.EgovImgPaginationRenderer"/>
+
+    <bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
+        <property name="rendererType">
+            <map>
+                <entry key="image" value-ref="imageRenderer"/>
+            </map>
+        </property>
+    </bean>
+	<!-- /For Pagination Tag -->
+
+    <mvc:view-controller path="/cmmn/validator.do" view-name="cmmn/validator"/>
+    <!--  
+    	<bean id="handlerMapping" 
+	class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	   <property name="interceptors">
+	     <list>
+	       <ref bean="loginCheckInterceptor"/>
+	     </list>
+	   </property>
+	   <property name="mappings">
+	       <props>
+	          <prop key="/admin/movie/movieList.do">movieController</prop>
+	       </props>
+	   </property>
+	</bean>
+
+<bean id="movieController" class="com.class601.admin.movie.web.MovieController"></bean>
+<bean id="loginCheckInterceptor" class="com.class601.util.LoginCheckInterceptor"></bean>
+    -->
+</beans>

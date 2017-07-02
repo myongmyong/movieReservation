@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<title>Get AJAX</title>
+</head>
+<body>
+
+	<input type="button" id="getSend" value="getCall" />
+
+<script src="/sample/js/jquery-3.1.1.min.js"></script>
+<script>
+	$(function(){
+		$('#getSend').click(getSendClick);
+	});
+	
+	function getSendClick(){
+		$.get('demo_test.txt',function(data, status, xhr){
+			alert('Data : ' + data + " || " + "status : " + xhr.status);			
+		});
+	}
+</script>	
+</body>
+</html>

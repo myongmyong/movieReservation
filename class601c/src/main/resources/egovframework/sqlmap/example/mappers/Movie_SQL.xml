@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Movie">
+    
+	<resultMap id="movie" type="com.class601.vo.MovieVo">
+		<result property="movieId" column="MOVIE_ID"/>
+		<result property="movieNm" column="MOVIE_NM"/>
+		<result property="movieIntro" column="MOVIE_INTRO"/>
+		<result property="movieActor" column="MOVIE_ACTOR"/>
+		<result property="movieDirector" column="MOVIE_DIRECTOR"/>
+		<result property="movieGenre1" column="MOVIE_GENRE1"/>
+		<result property="movieGenre2" column="MOVIE_GENRE2"/>
+		<result property="movieGenre3" column="MOVIE_GENRE3"/>
+		<result property="movieReleaseDate" column="MOVIE_RELEASE_DATE"/>
+		<result property="movieShowingYn" column="MOVIE_SHOWING_YN"/>
+		<result property="movieRating" column="MOVIE_RATING"/>
+		<result property="movieShowingTime" column="MOVIE_SHOWING_TIME"/>
+		<result property="movieNation" column="MOVIE_NATION"/>
+	</resultMap>
+	
+	<sql id="movieList">
+	    select  MOVIE_ID
+	    		,MOVIE_NM
+				,MOVIE_INTRO
+				,MOVIE_ACTOR
+				,MOVIE_DIRECTOR
+				,MOVIE_GENRE1
+				,MOVIE_GENRE2
+				,MOVIE_GENRE3
+				,MOVIE_RELEASE_DATE
+				,MOVIE_SHOWING_YN
+				,MOVIE_RATING
+				,MOVIE_SHOWING_TIME
+				,MOVIE_NATION 
+		from movie_info
+		WHERE MOVIE_ID LIKE '%'||#{movieId}||'%'
+		ORDER BY MOVIE_ID DESC	    	    
+	</sql>
+	
+	<select id="selectMovieList" parameterType="movieVo" resultMap="movie">
+		SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+				<include refid="movieList"/>
+			) A
+		)
+		WHERE ROWNUM <![CDATA[ <= ]]> #{pageSize}
+			AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+	</select>
+
+	<select id="moviesList" parameterType="movieVo" resultMap="movie" >
+
+	        SELECT MOVIE_ID
+	        	 , MOVIE_NM
+		    FROM MOVIE_INFO
+		    WHERE MOVIE_SHOWING_YN = '상영 중'
+		    ORDER BY MOVIE_NM DESC
+
+	</select>
+	
+	
+	<select id="moviesDetailView" parameterType="movieVo" resultMap="movie">
+	    SELECT MOVIE_ID
+	    		,MOVIE_NM
+				,MOVIE_ACTOR
+				,MOVIE_DIRECTOR
+				,MOVIE_GENRE1
+				,MOVIE_GENRE2
+				,MOVIE_GENRE3
+				,MOVIE_RELEASE_DATE
+				,MOVIE_SHOWING_YN
+				,MOVIE_RATING
+				,MOVIE_SHOWING_TIME
+				,MOVIE_NATION 
+				,MOVIE_INTRO
+		FROM MOVIE_INFO
+		WHERE MOVIE_ID = #{movieId}
+	</select>
+	
+	<select id="selectMovieListCount" parameterType="movieVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+			<include refid="movieList"/>
+		)	    
+	</select>
+
+
+	<select id="movieDetailView" parameterType="movieVo" resultMap="movie">
+	    SELECT MOVIE_ID
+	    		,MOVIE_NM
+				,MOVIE_ACTOR
+				,MOVIE_DIRECTOR
+				,MOVIE_GENRE1
+				,MOVIE_GENRE2
+				,MOVIE_GENRE3
+				,MOVIE_RELEASE_DATE
+				,MOVIE_SHOWING_YN
+				,MOVIE_RATING
+				,MOVIE_SHOWING_TIME
+				,MOVIE_NATION 
+				,MOVIE_INTRO
+		FROM MOVIE_INFO
+		WHERE MOVIE_ID = #{movieId}
+	</select>
+	
+	
+	<insert id="movieInsert">
+	    INSERT INTO movie_info(MOVIE_ID
+				,MOVIE_NM
+				,MOVIE_INTRO
+				,MOVIE_ACTOR
+				,MOVIE_DIRECTOR
+				,MOVIE_GENRE1
+				,MOVIE_GENRE2
+				,MOVIE_GENRE3
+				,MOVIE_RELEASE_DATE
+				,MOVIE_SHOWING_YN
+				,MOVIE_RATING
+				,MOVIE_SHOWING_TIME
+				,MOVIE_NATION)
+	    VALUES(
+	    #{movieId}, #{movieNm},#{movieIntro},  #{movieActor}
+	    , #{movieDirector}, #{movieGenre1}, #{movieGenre2}, #{movieGenre3}
+	     , #{movieReleaseDate}, #{movieShowingYn}, #{movieRating}
+	     , #{movieShowingTime}, #{movieNation}
+	     )
+	</insert>
+
+	<update id="movieModify">
+	    UPDATE movie_info 
+	    SET
+	    	 MOVIE_NM = #{movieNm}
+	    	,MOVIE_ACTOR = #{movieActor}
+	    	,MOVIE_INTRO = #{movieIntro}
+	  	  	,MOVIE_DIRECTOR = #{movieDirector}
+	   	 	,MOVIE_GENRE1= #{movieGenre1}
+	 	  	 ,MOVIE_GENRE2= #{movieGenre2}
+	   	 	,MOVIE_GENRE3 = #{movieGenre3}
+	   	 	 ,MOVIE_RELEASE_DATE = #{movieReleaseDate}
+	    	 ,MOVIE_SHOWING_YN = #{movieShowingYn}
+	    	 ,MOVIE_RATING = #{movieRating}
+		     ,MOVIE_SHOWING_TIME = #{movieShowingTime}
+		     ,MOVIE_NATION= #{movieNation}
+		     
+	    WHERE
+	    	MOVIE_ID = #{movieId}
+	</update>
+	
+	<delete id="movieDelete">
+	    DELETE movie_info
+	    WHERE MOVIE_ID = #{movieId}
+	</delete>
+	
+</mapper>

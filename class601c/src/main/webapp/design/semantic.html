@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<title>HTML5 New Semantic</title>
+	<style>
+		* {
+			margin:0px; padding:0px;
+		}
+		header,nav,section,footer {
+			border:solid 1px black;
+		}
+		.pageHeader{
+			height: 80px;
+		}
+		nav {
+			width: 200px; float:left;
+		}
+		section {
+			float: left; width:500px;
+		}
+	</style>
+</head>
+<body>
+
+	<h2>semantic example - html5 version</h2>
+	<hr />
+	<div id="wrapper2">
+		<header class="pageHeader">
+			<h1>HTML + JavaScript 배우기</h1>
+		</header>
+		<nav>
+			<h2>목차</h2>
+			<ul>
+				<li><a href="#sec10">1장 html 개념</a>
+					<ul>
+						<li><a href="#sec11">1-1. html 역사</a></li>
+						<li><a href="#sec12">1-2. html 맛보기</a></li>
+					</ul></li>
+				<li><a href="#sec20">2장 html 기초</a>
+					<ul>
+						<li><a href="#sec21">2-1. html 기본태그</a></li>
+						<li><a href="#sec22">2-2. html 폼태그</a></li>
+					</ul></li>
+				<li><a href="#sec30">3장 javascript</a>
+					<ul>
+						<li><a href="#sec31">3-1. javascript 기본</a></li>
+						<li><a href="#sec32">3-2. jQuery</a></li>
+					</ul></li>
+			</ul>
+		</nav>
+		<section>
+			<article>
+				<header>
+					<h2 id="sec10">1장 html 개념</h2>
+					<aside style="float:right; width:100px; height:150px; border:1px solid red;">구와와와와와와고고오고고우우웅오고오오오옹오</aside>
+				</header>
+					<h3 id="sec11">1-1. html 역사</h3>
+					<p>
+						The World Wide Fund for Nature (<a href="#wwf">WWF</a>)The World
+						Wide Fund for Nature (WWF)The World Wide Fund for Nature (WWF)The
+						World Wide Fund for Nature (WWF)
+					</p>
+					<h3 id="sec12">1-2. html 맛보기</h3>
+					<p>The World Wide Fund for Nature (WWF)The World Wide Fund for
+						Nature (WWF)</p>
+			</article>
+			<article>
+				<header>
+					<h2 id="sec20">2장 html 기초</h2>
+				</header>
+					<h3 id="sec21">2-1. html 기본태그</h3>
+					<p>The World Wide Fund for Nature (WWF)The World Wide Fund for
+						Nature (WWF)</p>
+					<h3 id="sec22">2-2. html 폼태그</h3>
+					<p>The World Wide Fund for Nature (WWF)The World Wide Fund for
+						Nature (WWF)</p>
+			</article>
+			<article>
+				<header>
+					<h2 id="sec30">3장 javascript</h2>
+				</header>
+					<h3 id="sec31">3-1. javascript 기본</h3>
+					<p>The World Wide Fund for Nature (WWF)The World Wide Fund for
+						Nature (WWF)</p>
+					<h3 id="sec32">3-2. jQuery</h3>
+					<p>The World Wide Fund for Nature (WWF)The World Wide Fund for
+						Nature (WWF)</p>
+			</article>
+		</section>
+		<!-- section, article, aside -->
+		<div style="clear:both;"></div>
+		<footer>
+			<ol>
+				<li id="wwf">WWF : World Wide Fund for Nature.</li>
+			</ol>
+		</footer>
+	</div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>checkbox list</title>
+</head>
+<style>
+	tr, th, td {
+		border: 1px solid black;
+	}
+</style>
+<body>
+	<table>
+		<tr>
+			<th>chk</th>
+			<th>순번</th>
+			<th>제목</th>
+			<th>작성자</th>
+			<th>작성일</th>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="1" /></td>
+			<td>1</td>
+			<td>'르브론 트리플더블' CAVS, 개막전 뉴욕 완파</td>
+			<td>NAVER NEWS</td>
+			<td>2016-10-26</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="2" /></td>
+			<td>2</td>
+			<td>통일부 "개성공단 중단, NSC에서 결정"</td>
+			<td>NAVER NEWS</td>
+			<td>2016-10-27</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="3" /></td>
+			<td>3</td>
+			<td>5월단체 "최순실이 고친 5·18 기념사…모욕감 분노 느낀다"</td>
+			<td>NAVER NEWS</td>
+			<td>2016-10-28</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="4" /></td>
+			<td>4</td>
+			<td>"승마, 증빙만 있으면 결석이 출석으로"</td>
+			<td>NAVER NEWS</td>
+			<td>2016-10-29</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="5" /></td>
+			<td>5</td>
+			<td>성병대 현장검증서 횡설수설…"경찰 독살당해"</td>
+			<td>NAVER NEWS</td>
+			<td>2016-10-30</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="6" /></td>
+			<td>6</td>
+			<td>올해 땅값 1.97% 올라…제주 7.06%↑ 최고</td>
+			<td>NAVER NEWS</td>
+			<td>2016-10-31</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="7" /></td>
+			<td>7</td>
+			<td>'불륜남녀·연인 휴식처' 무인텔 탈세 온상(?)</td>
+			<td>NAVER NEWS</td>
+			<td>2016-11-01</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="8" /></td>
+			<td>8</td>
+			<td>"장병 급식 배추김치서 30㎝ 칼 나와"</td>
+			<td>NAVER NEWS</td>
+			<td>2016-11-02</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="9" /></td>
+			<td>9</td>
+			<td>최순실, 서울 강남과 강원도에 상당한 부동산 소유</td>
+			<td>NAVER NEWS</td>
+			<td>2016-11-03</td>
+		</tr>
+		<tr>
+			<td><input type="checkbox" name="chk" value="10" /></td>
+			<td>10</td>
+			<td>추미애 "두 명의 대통령이 국정운영…특검으로 전모 밝혀야"</td>
+			<td>NAVER NEWS</td>
+			<td>2016-11-04</td>
+		</tr>
+	</table>
+
+	<form action="" method="post" id="deleteForm">
+		<input type="hidden" name="chkList" value="" />
+		<input type="submit" value="Delete" />
+	</form>
+	
+<script src="/sample/js/jquery-3.1.1.min.js"></script>
+<script>
+	$(function(){
+		$('#deleteForm').submit(function(event){
+			var arrChecked = checkedList();
+			if(arrChecked.length < 1){
+					alert('there are no things that checked.');
+					event.preventDefault();
+			}
+			var checkedStr = arrChecked.join(',');			//선택된 배열을 문자열로 변환
+			$('input[name="chkList"]').val(checkedStr);		//'chkList' input에 checkedStr 값을 할당
+		});		
+	});
+	
+	function checkedList(){
+		var arrChk = [];
+		
+		$('input[name="chk"]:checked').each(function(){
+			arrChk.push($(this).val());
+		});
+		
+		return arrChk;
+	}
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="guest">
+    
+    <resultMap id="guest" type="com.class601.vo.GuestVo">
+        <result property="noUId" column="NO_U_ID"></result>
+        <result property="noUPw" column="NO_U_PW"></result>
+        <result property="noUBirth" column="NO_U_BIRTH"></result>
+        <result property="noUNm" column="NO_U_NM"></result> 
+        <result property="noUMobileCarrier" column="NO_U_MOBILE_CARRIER"></result>
+        <result property="noUHp" column="NO_U_HP"></result>
+    </resultMap>
+
+    <select id="guestLogin" parameterType="guestVo" resultMap="guest">
+        SELECT NO_U_ID FROM NO_U_INFO
+		WHERE NO_U_PW = #{noUPw}
+		AND NO_U_BIRTH = #{noUBirth}
+		AND NO_U_NM = #{noUNm}
+		AND NO_U_MOBILE_CARRIER = #{noUMobileCarrier}
+		AND NO_U_HP = #{noUHp}
+    </select>
+    
+    <insert id="guestRegist">
+        INSERT INTO NO_U_INFO ( 
+        NO_U_ID
+        ,NO_U_PW
+        ,NO_U_BIRTH
+        ,NO_U_NM
+        ,NO_U_MOBILE_CARRIER
+        ,NO_U_HP
+        )
+        VALUES (
+        #{noUId}
+        ,#{noUPw}
+        ,#{noUBirth}
+        ,#{noUNm}
+        ,#{noUMobileCarrier}
+        ,#{noUHp}
+        ) 
+    </insert>
+    
+</mapper>

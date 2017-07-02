@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="time">
+    
+    <resultMap id="time" type="com.class601.vo.TimeVo">
+        <result property="timeTypeId" column="TIME_TYPE_ID"></result>
+        <result property="timeTypeNm" column="TIME_TYPE_NM"></result>
+        <result property="timeTypePrice" column="TIME_TYPE_PRICE"></result>
+    </resultMap>
+    
+
+
+    <sql id="time">
+	    SELECT TIME_TYPE_ID, TIME_TYPE_NM, TIME_TYPE_PRICE 
+		FROM TIME_TYPE 
+		ORDER BY TIME_TYPE_ID DESC	    	    
+	</sql>
+	
+    <select id="timeAllList" parameterType="timeVo" resultMap="time">
+				<include refid="time"/>        
+    </select>
+        
+    <select id="timeList" parameterType="timeVo" resultMap="time">
+		SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+				<include refid="time"/>
+			) A
+		)
+		WHERE ROWNUM <![CDATA[ <= ]]> #{pageSize}
+			AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+    </select>
+    
+    <select id="timeListCount" parameterType="timeVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+			<include refid="time"/>
+		)	   
+	</select>
+	
+	<select id="timeDetailView" parameterType="timeVo" resultMap="time">
+	    SELECT TIME_TYPE_ID, TIME_TYPE_NM, TIME_TYPE_PRICE
+		FROM TIME_TYPE
+		WHERE TIME_TYPE_ID = #{timeTypeId}
+	</select>
+	
+	<insert id="timeInsert">
+	    INSERT INTO TIME_TYPE(TIME_TYPE_ID, TIME_TYPE_NM, TIME_TYPE_PRICE)
+	    VALUES(#{timeTypeId}, #{timeTypeNm}, #{timeTypePrice})
+	</insert>
+	
+	<update id="timeModify">
+	    UPDATE TIME_TYPE
+	    SET
+			  TIME_TYPE_NM = #{timeTypeNm}
+	    	, TIME_TYPE_PRICE = #{timeTypePrice}
+	    WHERE
+	    	TIME_TYPE_ID = #{timeTypeId}	
+	</update>
+	
+	<delete id="timeDelete">
+	    DELETE TIME_TYPE
+	    WHERE TIME_TYPE_ID = #{timeTypeId}
+	</delete>
+    
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Emp">
+    
+	<resultMap id="emp" type="com.class601.vo.EmpVo">
+		<result property="empNo" column="EMPNO"/>
+		<result property="eName" column="ENAME"/>
+		<result property="job" column="JOB"/>
+		<result property="mgr" column="MGR"/>
+		<result property="hireDate" column="HIREDATE"/>
+		<result property="sal" column="SAL"/>
+		<result property="comm" column="COMM"/>
+		<result property="deptNo" column="DEPTNO"/>
+	</resultMap>
+	
+	<sql id="empList">
+	    SELECT EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO 
+		FROM EMP 
+		WHERE EMPNO LIKE '%'||#{empNo}||'%'
+		ORDER BY EMPNO DESC	    	    
+	</sql>
+	
+	<select id="selectEmpList" parameterType="empVo" resultType="empVo">
+		SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+				<include refid="empList"/>
+			) A
+		)
+		WHERE ROWNUM <![CDATA[ <= ]]> #{pageSize}
+			AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+	</select>
+	
+	<select id="selectEmpListCount" parameterType="empVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+			<include refid="empList"/>
+		)	   
+	</select>
+	
+	<select id="selectEmp" parameterType="empVo" resultType="empVo">
+	    SELECT EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO
+		FROM EMP
+		WHERE EMPNO = #{empNo}
+	</select>
+	
+	<insert id="addEmp">
+	    INSERT INTO EMP(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO)
+	    VALUES(#{empNo}, #{eName}, #{job}, #{mgr}, #{hireDate}, #{sal}, #{comm}, #{deptNo})
+	</insert>
+	
+	<update id="updateEmp">
+	    UPDATE EMP
+	    SET
+	    	ENAME = #{eName}
+	    	, JOB = #{job}
+	    	, MGR = #{mgr}
+	    	, HIREDATE = #{hireDate}
+	    	, SAL = #{sal}
+	    	, COMM = #{comm}
+	    	, DEPTNO = #{deptNo}
+	    WHERE
+	    	EMPNO = #{empNo}	
+	</update>
+	
+	<delete id="deleteEmp">
+	    DELETE EMP
+	    WHERE EMPNO = #{empNo}
+	</delete>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

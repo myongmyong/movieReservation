@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<title>Sign up Page</title>
+	<style>
+		tr, td {
+			border: 1px solid black;
+			background-color:yellow;
+		}
+	</style>
+</head>
+<body>
+	<div id="eventMsg" style="width:250px;height:100px;">
+		
+	</div>
+	<h1>기업회원 등록</h1>
+	<form name="signUpForm" action="https://www.google.com" method="get">
+		<table>
+			<tr>
+				<td>
+					<label for="userId" class="hiddenLabel">
+					기업회원아이디 *
+					</label>
+				</td>
+				<td>
+					<input type="text" name="userId" id="userId" />
+					<input type="button" value="검색" name="chkId" id="chkId" />
+					<label for="chkId">
+					(중복아이디 검색)
+					</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<label for="company" class="hiddenLabel">
+				회사명 *
+				</label>
+				</td>
+				<td><input type="text" name="company" id="company" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="pw">
+				비밀번호 *
+				</label>
+				</td>
+				<td><input type="password" name="pw" id="pw" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="chkPw">
+				비밀번호확인 *
+				</label>
+				</td>
+				<td><input type="password" name="chkPw" id="chkPw" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="pwHint">
+				비밀번호힌트 *
+				</label>
+				</td>
+				<td>
+					<select name="pwHint" id="pwHint" style="width:200px;">
+						<option value="hint1">1</option>
+						<option value="hint2">2</option>
+						<option value="hint3">3</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<label for="pwAnsr">
+				비밀번호정답 *
+				</label>
+				</td>
+				<td><input type="text" name="pwAnsr" id="pwAnsr" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="jobCode">
+				업종코드
+				</label>
+				</td>
+				<td>
+					<select name="jobCode" id="jobCode" style="width:200px">
+						<option value="job1">가:도소매</option>
+						<option value="job2">나:제조업</option>
+						<option value="job3">다:유통업</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<label for="comCode">
+				기업구분코드
+				</label>
+				</td>
+				<td>
+					<select name="comCode" id="comCode">
+						<option value="com1">1:대기업</option>
+						<option value="com2">2:중소기업</option>
+						<option value="com3">3:개인사업자</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<label for="presiNm">
+				대표이사이름
+				</label>
+				</td>
+				<td><input type="text" name="presiNm" id="presiNm" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="busiRegNo">
+				사업자등록번호 *
+				</label>
+				</td>
+				<td><input type="text" name="busiRegNo" id="busiRegNo" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="comRegNo">
+				법인등록번호
+				</label>
+				</td>
+				<td><input type="text" name="comRegNo" id="comRegNo" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="tel">
+				회사전화번호 *
+				</label>
+				</td>
+				<td><input type="tel" name="tel" id="tel" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="pax">
+				팩스번호
+				</label>
+				</td>
+				<td><input type="text" name="pax" id="pax" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="zipCode">
+				우편번호 *
+				</label>
+				</td>
+				<td>
+					<input type="text" name="zipCode" id="zipCode" />
+					<input type="button" name="searchZip" value="우편번호 검색" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<label for="addr">
+				주소 *
+				</label>
+				</td>
+				<td><input type="text" name="addr" id="addr" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="addrDetail">
+				상세주소
+				</label>
+				</td>
+				<td><input type="text" name="addrDetail" id="addrDetail" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="applyNm">
+				신청자이름 *
+				</label>
+				</td>
+				<td><input type="text" name="applyNm" id="applyNm" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="socialRegNo">
+				신청자주민등록번호 *
+				</label>
+				</td>
+				<td><input type="text" name="socialRegNo" id="socialRegNo" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="email">
+				신청자이메일주소 *
+				</label>
+				</td>
+				<td><input type="text" name="email" id="email" /></td>
+			</tr>
+			<tr>
+				<td>
+				<label for="grpId">
+				그룹아이디 *
+				</label>
+				</td>
+				<td>
+					<select name="grpId" id="grpId" style="width:100px;">
+						<option value="id1">ID1</option>
+						<option value="id2">ID2</option>
+						<option value="id3">ID3</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<label for="statusCode"></label>
+				기업회원상태코드 *
+				</td>
+				<td>
+					<select name="statusCode" id="statusCode" style="width:100px;">
+						<option value="status1">1:활성</option>
+						<option value="status2">2:폐업</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="등록" />
+		<input type="button" value="목록" />
+		<input type="button" value="취소" />
+	</form>
+	
+	<input type="button" value="라벨숨기기" id="hideLabel" />
+
+<script src="/sample/js/jquery-3.1.1.min.js"></script>
+<script>
+	$(function(){
+		
+		
+		$('form').submit(function(event){
+			var userId = $('#userId').val();
+			var company = $('#company').val();
+			var pw = $('#pw').val();
+			var chkPw = $('#chkPw').val();
+			var pwHint = $('#pwHint').val();
+			var pwAnsr = $('#pwAnsr').val();
+			var busiRegNo = $('#busiRegNo').val();
+			var tel = $('#tel').val();
+			var zipCode = $('#zipCode').val();
+			var addr = $('#addr').val();
+			var applyNm = $('#applyNm').val();
+			var socialRegNo = $('#socialRegNo').val();
+			var email = $('#email').val();
+			var grpId = $('#grpId').val();
+			var statusCode = $('#statusCode').val();
+			
+			if(userId.length<4 || userId.length>12){
+				alert('아이디는 4~12자리로 구성되어야 합니다.');
+				event.preventDefault();
+			}else if(company.length<1){
+				alert('회사명을 입력하세요');
+				event.preventDefault();
+			}else if(pw.length<13){
+				alert('패스워드는 12자리 이상이어야 합니다.');
+				event.preventDefault();
+			}else if(chkPw.length<1){
+				alert('패스워드를 입력하세요.');
+				event.preventDefault();
+			}else if(chkPw != pw){
+				alert('패스워드가 다릅니다.');
+				event.preventDefault();
+			}
+		});
+		
+		$('#chkId').click(chkId);
+		
+		function chkId(){
+			
+			var userId = $('#userId').val();
+			
+			$.ajax({
+				url: '/sample/signup/chkId.do',
+				type: 'post',
+				datatype: 'json',
+				data: 
+					{
+						"chkId":userId
+					},
+				success:
+					function(data){
+						if(data.result){
+							alert('중복되는 아이디가 있습니다.');
+						}else{
+							alert('사용가능한 아이디입니다.');
+						}
+					},
+				error: 
+					function(req, status, error){
+						alert('서버 에러입니다. 관리자에게 문의해주세요.');
+					}
+			});
+		}
+		
+		
+		$(window).resize(function(){
+			$('#eventMsg').text('width is ' + $(window).width());
+		});
+		
+		/*
+		$('#chkId').click(function(){
+			alert('중복되는 아이디가 없습니다.');
+		});
+		*/
+			
+		$('#busiRegNo').click(function(){
+			alert('사업자등록번호 입력칸입니다.');
+		});
+
+		$('#hideLabel').click(function(){
+			$('.hiddenLabel').toggle();
+		});
+		
+		$('#zipCode').dblclick(function(){
+			alert('double click!!');			
+		});
+
+		$('#company').hover(function(){
+			$('#eventMsg').text('mouse in!!');
+		}, function(){
+			$('#eventMsg').text('mouse out!!');
+		});
+		
+		$('#grpId').change(function(){
+			$('#eventMsg').text($(this).val());
+			$('#applyNm').val($(this).val());
+		});
+				
+	});
+</script>	
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

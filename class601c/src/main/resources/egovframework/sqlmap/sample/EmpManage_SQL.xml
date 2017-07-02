@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Emp">
+    <typeAlias alias="empVo" type="com.class601.vo.EmpVo"/>
+  
+	<resultMap id="emp" class="com.class601.vo.EmpVo">
+		<result property="empNo" column="EMPNO"/>
+		<result property="eName" column="ENAME"/>
+		<result property="job" column="JOB"/>
+		<result property="mgr" column="MGR"/>
+		<result property="hireDate" column="HIREDATE"/>
+		<result property="sal" column="SAL"/>
+		<result property="comm" column="COMM"/>
+		<result property="deptNo" column="DEPTNO"/>
+	</resultMap>
+	<sql id="emp">
+	    
+		SELECT EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO 
+		FROM EMP WHERE EMPNO LIKE '%'||#empNo#||'%' order by empno desc
+	</sql>
+	<select id="selectEmpList" parameterClass="empVo" resultClass="empVo">
+		select *
+		from (
+		        select rownum as rn, a.*
+		        from (
+		            <include refid="emp" />
+		
+		            ) a
+		    )
+		where rownum <![CDATA[ <= ]]> #pageSize#
+		    and rn <![CDATA[ > ]]>  (#pageNo#-1)*#pageSize#
+		
+	</select>
+	<select id="selectEmpListCount" parameterClass="empVo" resultClass="int">
+		        select count(0) totalCnt
+		        from (
+		            <include refid="emp" />
+				)		
+	</select>
+	<select id="selectEmp" parameterClass="empVo" resultClass="empVo">
+	    SELECT EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO 
+		FROM EMP WHERE EMPNO = #empNo#
+	</select>
+	<update id="addEmp"  parameterClass="empVo" >
+	    INSERT INTO EMP (EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) 
+	    VALUES(#empNo#, #eName#, #job#, #mgr#, #hireDate#, #sal#, #comm#, #deptNo#)
+	</update>
+	<update id="updateEmp">
+	    UPDATE EMP
+	    SET
+	    	ENAME = #eName#
+	    	, JOB = #job#
+	    	, MGR = #mgr#
+	    	, HIREDATE = #hireDate#
+	    	, SAL = #sal#
+	    	, COMM = #comm#
+	    	, DEPTNO = #deptNo#
+	    WHERE
+	    	EMPNO = #empNo#
+	</update>
+	<delete id="deleteEmp">
+	    DELETE EMP WHERE EMPNO = #empNo#
+	</delete>
+	<select id="getEmpPkMax" resultClass="String">
+	    SELECT NEXT_ID FROM IDS WHERE TABLE_NAME='EMP'
+	</select>
+	<update id="updateEmpPkMax">
+	    UPDATE IDS
+	    SET
+	    	NEXT_ID = (SELECT NEXT_ID+1 FROM IDS WHERE TABLE_NAME='EMP')
+	    WHERE 
+	    	TABLE_NAME = 'EMP'
+	</update>
+	
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<title>Basic Ajax</title>
+</head>
+<body>
+	
+	<div id="textArea">여기에 가져온 데이터가 뿌려집니다.</div>
+	
+	<input type="button" id="importTxt" value="take a txt" />
+
+<script src="/sample/js/jquery-3.1.1.min.js"></script>
+<script>
+	$(function(){
+		$('#importTxt').click(importTxtClick);
+	});
+	
+	function importTxtClick(){
+		$('#textArea').load('demo_tdest.txt', function(responseTxt, statusTxt, xhr){
+			
+			if(xhr.status == '200'){
+		
+			}else{
+				alert('에러가 발생했습니다. ' + xhr.status + " " + xhr.statusText );
+			}
+			
+			//alert(responseTxt + ' :: ' + statusTxt + ' :: ' + xhr.readyState + ' :: ' + xhr.status + " :: " + xhr.statusText);
+		});
+	};
+</script>
+</body>
+</html>

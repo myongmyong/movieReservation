@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "Theater">
+    
+    <resultMap id="theater" type="com.class601.vo.TheaterVo">
+   		<result property="theaterId" column="THEATER_ID"/>
+		<result property="theaterNm" column="THEATER_NM"/>
+		<result property="theaterOldAddress" column="THEATER_OLD_ADDRESS"/>
+		<result property="theaterNewAddress" column="THEATER_NEW_ADDRESS"/>
+		<result property="theaterTel" column="THEATER_TEL"/>
+		<result property="theaterCinemaNum" column="THEATER_CINEMA_NUM"/>
+		<result property="theaterSeatNum" column="THEATER_SEAT_NUM"/>
+		<result property="theaterArea" column="THEATER_AREA"/>
+	</resultMap>
+	
+    <sql id="theaterList">
+        SELECT THEATER_ID
+		    , THEATER_NM
+		    , THEATER_OLD_ADDRESS
+		    , THEATER_NEW_ADDRESS
+		    , THEATER_TEL
+		    , THEATER_CINEMA_NUM
+		    , THEATER_SEAT_NUM
+		    , THEATER_AREA
+		FROM THEATER_INFO
+		WHERE THEATER_ID LIKE '%'||#{theaterId}||'%'
+		ORDER BY THEATER_ID DESC
+    </sql>
+    
+    <select id="selectTheaterList" parameterType="theaterVo" resultMap="theater">
+		SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+				<include refid="theaterList"/>
+			) A
+		)
+		WHERE ROWNUM <![CDATA[ <= ]]> #{pageSize}
+			AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+	</select>
+	
+    <select id="theaterList" parameterType="theaterVo" resultMap="theater">
+		<include refid="theaterList"/>
+	</select>
+    
+    
+    <select id="theatersList" parameterType="theaterVo" resultMap="theater" >
+        SELECT THEATER_ID
+        	 , THEATER_NM
+        FROM THEATER_INFO
+        ORDER BY THEATER_NM DESC
+    </select>
+    
+    <select id="theatersAreaView" parameterType="theaterVo" resultMap="theater">
+        SELECT THEATER_ID
+        	 , THEATER_NM
+        	 , THEATER_NEW_ADDRESS
+        	 , THEATER_TEL
+        	 , THEATER_CINEMA_NUM
+	 		 , THEATER_SEAT_NUM
+        FROM THEATER_INFO
+        WHERE THEATER_AREA = #{theaterArea}
+    </select>
+    
+ 	<select id="selectTheaterListCount" parameterType="theaterVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+			<include refid="theaterList"/>
+		)	   
+	</select>
+	
+	<select id="theaterDetail" parameterType="theaterVo" resultMap="theater">
+	    SELECT THEATER_ID
+		    , THEATER_NM
+		    , THEATER_OLD_ADDRESS
+		    , THEATER_NEW_ADDRESS
+		    , THEATER_TEL
+		    , THEATER_CINEMA_NUM
+		    , THEATER_SEAT_NUM
+		    , THEATER_AREA
+		FROM THEATER_INFO
+		WHERE THEATER_ID = #{theaterId}
+	</select>
+	
+	<insert id="theaterInsert">
+	    INSERT INTO THEATER_INFO (
+	    	THEATER_ID
+		    , THEATER_NM
+		    , THEATER_OLD_ADDRESS
+		    , THEATER_NEW_ADDRESS
+		    , THEATER_TEL
+		    , THEATER_CINEMA_NUM
+		    , THEATER_SEAT_NUM
+		    , THEATER_AREA
+	    )
+	    VALUES( 
+			#{theaterId}
+		  , #{theaterNm}
+		  , #{theaterOldAddress}
+		  , #{theaterNewAddress}
+		  , #{theaterTel}
+		  , #{theaterCinemaNum}
+		  , #{theaterSeatNum}
+		  , #{theaterArea}
+		)
+
+	</insert>
+	
+	<update id="theaterModify">
+	    UPDATE THEATER_INFO
+		<trim prefix="SET" suffixOverrides=",">
+		    <if test=" theaterNm		 != null">THEATER_NM = #{theaterNm}                 ,</if>
+		    <if test=" theaterOldAddress != null">THEATER_OLD_ADDRESS = #{theaterOldAddress},</if>
+		    <if test=" theaterNewAddress != null">THEATER_NEW_ADDRESS = #{theaterNewAddress},</if>
+		    <if test=" theaterTel		 != null">THEATER_TEL = #{theaterTel}               ,</if>
+		    <if test=" theaterCinemaNum	 != null">THEATER_CINEMA_NUM = #{theaterCinemaNum}  ,</if>
+		    <if test=" theaterSeatNum	 != null">THEATER_SEAT_NUM = #{theaterSeatNum}      ,</if>
+		    <if test=" theaterArea		 != null">THEATER_AREA = #{theaterArea}             </if>
+		 </trim> 
+		WHERE 
+		    THEATER_ID = #{theaterId}
+	</update>
+	
+	<delete id="theaterDelete">
+	    DELETE THEATER_INFO
+	    WHERE THEATER_ID = #{theaterId}
+	</delete>
+	
+	<select id="theatersDetail" parameterType="theaterVo" resultMap="theater">
+	    SELECT *
+	    FROM THEATER_INFO
+	    WHERE
+	    	THEATER_NM = #{theaterNm}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

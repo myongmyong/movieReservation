@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+</head>
+<body>
+	<input type="button" id="postSend" value="postCall" />
+<script src="/sample/js/jquery-3.1.1.min.js"></script>
+<script>
+	$(function(){
+		$('#postSend').click(postSendClick);
+	});
+	
+	function postSendClick(){
+		$.post(
+				//URL 부분
+				'/sample/ajax/postCall2.do',
+				//DATA 부분(JSON 형식)
+				{
+					name: "choongang",
+					age: "20"
+				},
+				//STATUS(Only success) 부분
+				function(data, status, xhr){
+					
+					//var returnData = JSON.parse(data)
+					alert(data.name + " || " + data.age + " || " + status);
+					
+		});
+	}
+</script>	
+</body>
+</html>

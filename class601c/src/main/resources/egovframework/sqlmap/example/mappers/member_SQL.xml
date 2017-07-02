@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+    
+    <resultMap id="member" type="com.class601.vo.MemberVo">
+        <result property="userId" column="USER_ID"></result>
+        <result property="userPassword" column="USER_PASSWORD"></result>
+        <result property="userPasswordHint" column="USER_PASSWORD_HINT"></result>
+        <result property="userPasswordAnswer" column="USER_PASSWORD_ANSWER"></result>
+        <result property="userNm" column="USER_NM"></result>
+        <result property="userEmail" column="USER_EMAIL"></result>
+        <result property="userBirthDate" column="USER_BIRTH_DATE"></result>
+        <result property="userGender" column="USER_GENDER"></result>
+        <result property="userMobileCarrier" column="USER_MOBILE_CARRIER"></result>
+        <result property="userCellphone" column="USER_CELLPHONE"></result>
+        <result property="userRating" column="USER_RATING"></result>
+        <result property="userPerformance" column="USER_PERFORMANCE"></result>
+    </resultMap>
+    
+
+
+    <sql id="member">
+	    SELECT USER_ID,USER_PASSWORD,USER_PASSWORD_HINT,USER_PASSWORD_ANSWER,USER_NM
+		,USER_EMAIL,USER_BIRTH_DATE,USER_GENDER,USER_MOBILE_CARRIER,USER_CELLPHONE
+		,USER_RATING,USER_PERFORMANCE
+		FROM USER_INFO 
+		ORDER BY USER_ID DESC	    	    
+	</sql>
+        
+    <select id="memberList" parameterType="memberVo" resultMap="member">
+		SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+				<include refid="member"/>
+			) A
+		)
+		WHERE ROWNUM <![CDATA[ <= ]]> #{pageSize}
+			AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+    </select>
+    
+    <select id="memberListCount" parameterType="memberVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+			<include refid="member"/>
+		)	   
+	</select>
+	
+	<select id="memberDetailView" parameterType="memberVo" resultMap="member">
+	    SELECT USER_ID,USER_PASSWORD,USER_PASSWORD_HINT,USER_PASSWORD_ANSWER,USER_NM
+		,USER_EMAIL,USER_BIRTH_DATE,USER_GENDER,USER_MOBILE_CARRIER,USER_CELLPHONE
+		,USER_RATING,USER_PERFORMANCE
+		FROM USER_INFO
+		WHERE USER_ID = #{userId}
+	</select>
+	
+	<update id="memberModify">
+	    UPDATE USER_INFO
+	    SET
+	    	USER_RATING = #{userRating}
+	    WHERE
+	    	USER_ID = #{userId}	
+	</update>
+	
+	<delete id="memberDelete">
+	    DELETE USER_INFO
+	    WHERE USER_ID = #{userId}
+	</delete>
+    
+</mapper>

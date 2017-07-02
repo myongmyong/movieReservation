@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias alias="empVo" type="com.class601.vo.EmpVo" />
+		<typeAlias alias="adminLoginVo" type="com.class601.vo.AdminLoginVo" />
+		<typeAlias alias="ciTypeVo" type="com.class601.vo.CiTypeVo" />
+		<typeAlias alias="theaterVo" type="com.class601.vo.TheaterVo" />
+		<typeAlias alias="cinemaVo" type="com.class601.vo.CinemaVo" />
+		<typeAlias alias="movieVo" type="com.class601.vo.MovieVo" />
+		<typeAlias alias="timeVo" type="com.class601.vo.TimeVo" />
+		<typeAlias alias="memberVo" type="com.class601.vo.MemberVo" />
+		<typeAlias alias="codeVo" type="com.class601.vo.CodeVo" />
+		<typeAlias alias="userVo" type="com.class601.vo.UserVo" />
+		<typeAlias alias="showVo" type="com.class601.vo.ShowVo" />
+		<typeAlias alias="guestVo" type="com.class601.vo.GuestVo" />
+		<typeAlias alias="guestBookVo" type="com.class601.vo.GuestBookVo" />			
+		<typeAlias alias="replyVo" type="com.class601.vo.ReplyVo" />	
+		<typeAlias alias="bookVo" type="com.class601.vo.BookVo" />		
+		<typeAlias alias="bookingVo" type="com.class601.vo.BookingVo" />		
+	</typeAliases>
+</configuration>

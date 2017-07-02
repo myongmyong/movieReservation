@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "guestBookCon">
+    
+	 <resultMap id="guestBookCon" type="com.class601.vo.GuestBookVo">
+   		<result property="showId" column="SHOW_ID"/>
+		<result property="movieId" column="MOVIE_ID"/>
+		<result property="movieNm" column="MOVIE_NM"/>
+		<result property="theaterId" column="THEATER_ID"/>
+		<result property="theaterNm" column="THEATER_NM"/>
+		<result property="cinemaId" column="CINEMA_ID"/>
+		<result property="cinemaNm" column="CINEMA_NM"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="showDate" column="SHOW_DATE"/>
+		<result property="bookingId" column="BOOKING_ID"/>
+		<result property="bookingSeat" column="BOOKING_SEAT"/>
+		<result property="noUId" column="NO_U_ID"/>
+		<result property="noUNm" column="NO_U_NM"/>	
+	</resultMap>
+	 
+	<select id="guestBookCon" parameterType="guestBookVo" resultMap="guestBookCon">
+  SELECT SHINFO.*, B.BOOKING_ID, B.BOOKING_SEAT, B.BOOKING_DATE
+	  FROM
+			(
+	    SELECT 
+				SH.*, NUINFO.*
+			FROM
+				 (
+			      SELECT 
+				    	S.SHOW_ID
+				    	,S.MOVIE_ID
+				    	,S.THEATER_ID
+				    	,S.CINEMA_ID
+				    	,S.START_TIME
+				    	,S.SHOW_DATE
+				    	,M.MOVIE_NM
+             			,M.MOVIE_SHOWING_TIME
+				    	,T.THEATER_NM
+				    	,C.CINEMA_NM
+				    FROM
+				    	SHOW_INFO S
+				    	,MOVIE_INFO M
+				    	,THEATER_INFO T
+				    	,CINEMA_INFO C
+				    WHERE
+				    	S.MOVIE_ID = M.MOVIE_ID
+				    	AND S.THEATER_ID = T.THEATER_ID
+				    	AND S.CINEMA_ID = C.CINEMA_ID
+			      ) SH,(
+			      SELECT
+			        NI.NO_U_ID, NI.NO_U_NM
+			      FROM
+			        BOOKING_INFO BI,NO_U_INFO NI 
+			      WHERE
+              NI.NO_U_ID = BI.NO_U_ID
+			      ) NUINFO
+	    	 ) SHINFO, BOOKING_INFO B
+	     WHERE
+	      B.SHOW_ID = SHINFO.SHOW_ID
+	     AND
+	      SHINFO.NO_U_ID = #{noUId}
+	 </select>
+
+	 
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ciType">
+    
+    <resultMap id="ciType" type="com.class601.vo.CiTypeVo">
+        <result property="cinemaTypeId" column="CINEMA_TYPE_ID"></result>
+        <result property="cinemaTypeNm" column="CINEMA_TYPE_NM"></result>
+        <result property="cinemaTypePrice" column="CINEMA_TYPE_PRICE"></result>
+    </resultMap>
+    
+    <sql id="ciTypeList">
+	    SELECT CINEMA_TYPE_ID, CINEMA_TYPE_NM, CINEMA_TYPE_PRICE 
+		FROM CINEMA_TYPE 
+		ORDER BY CINEMA_TYPE_ID DESC	    	    
+	</sql>
+	
+    <select id="allTypeList" parameterType="ciTypeVo" resultMap="ciType">
+				<include refid="ciTypeList"/>        
+    </select>
+        
+    <select id="ci_typeList" parameterType="ciTypeVo" resultMap="ciType">
+		SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+				<include refid="ciTypeList"/>
+			) A
+		)
+		WHERE ROWNUM <![CDATA[ <= ]]> #{pageSize}
+			AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+    </select>
+    
+    <select id="ci_typeListCount" parameterType="ciTypeVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+			<include refid="ciTypeList"/>
+		)	   
+	</select>
+	
+	<select id="ci_typeDetailView" parameterType="ciTypeVo" resultMap="ciType">
+	    SELECT CINEMA_TYPE_ID, CINEMA_TYPE_NM, CINEMA_TYPE_PRICE
+		FROM CINEMA_TYPE
+		WHERE CINEMA_TYPE_ID = #{cinemaTypeId}
+	</select>
+	
+	<insert id="ci_typeInsert">
+	    INSERT INTO CINEMA_TYPE(CINEMA_TYPE_ID, CINEMA_TYPE_NM, CINEMA_TYPE_PRICE)
+	    VALUES(#{cinemaTypeId}, #{cinemaTypeNm}, #{cinemaTypePrice})
+	</insert>
+	
+	<update id="ci_typeModify">
+	    UPDATE CINEMA_TYPE
+	    SET
+			  CINEMA_TYPE_NM = #{cinemaTypeNm}
+	    	, CINEMA_TYPE_PRICE = #{cinemaTypePrice}
+	    WHERE
+	    	CINEMA_TYPE_ID = #{cinemaTypeId}	
+	</update>
+	
+	<delete id="ci_typeDelete">
+	    DELETE CINEMA_TYPE
+	    WHERE CINEMA_TYPE_ID = #{cinemaTypeId}
+	</delete>
+    
+</mapper>

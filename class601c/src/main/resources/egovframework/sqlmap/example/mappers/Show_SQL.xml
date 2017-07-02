@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "Show">
+    
+	 <resultMap id="show" type="com.class601.vo.ShowVo">
+   		<result property="showId" column="SHOW_ID"/>
+		<result property="movieId" column="MOVIE_ID"/>
+		<result property="movieNm" column="MOVIE_NM"/>
+		<result property="movieRating" column="MOVIE_RATING"/>
+		<result property="theaterId" column="THEATER_ID"/>
+		<result property="theaterNm" column="THEATER_NM"/>
+		<result property="cinemaId" column="CINEMA_ID"/>
+		<result property="cinemaNm" column="CINEMA_NM"/>
+		<result property="cinemaFloorNo" column="CINEMA_FLOOR_NO"/>
+		<result property="cinemaTypeId" column="CINEMA_TYPE_ID"/>
+		<result property="cinemaTypeNm" column="CINEMA_TYPE_NM"/>
+		<result property="cinemaTypePrice" column="CINEMA_TYPE_PRICE"/>
+		<result property="timeTypeId" column="TIME_TYPE_ID"/>
+		<result property="timeTypeNm" column="TIME_TYPE_NM"/>
+		<result property="timeTypePrice" column="TIME_TYPE_PRICE"/>
+		<result property="startTime" column="START_TIME"/>
+		<result property="showDate" column="SHOW_DATE"/>
+	</resultMap>
+	
+	 <sql id="showList">
+		SELECT 
+			SH.*
+			, CI.CINEMA_TYPE_NM
+		FROM
+			 (
+		      SELECT 
+			    	S.SHOW_ID
+			    	,S.MOVIE_ID
+			    	,S.THEATER_ID
+			    	,S.CINEMA_ID
+			    	,S.TIME_TYPE_ID
+			    	,S.START_TIME
+			    	,S.SHOW_DATE
+			    	,M.MOVIE_NM
+			    	,T.THEATER_NM
+			    	,C.CINEMA_NM
+           			,C.CINEMA_TYPE_ID
+			    	,TI.TIME_TYPE_NM
+			    FROM
+			    	SHOW_INFO S
+			    	,MOVIE_INFO M
+			    	,THEATER_INFO T
+			    	,CINEMA_INFO C
+			    	,TIME_TYPE TI
+			    WHERE
+			    	S.MOVIE_ID = M.MOVIE_ID
+			    	AND S.THEATER_ID = T.THEATER_ID
+			    	AND S.CINEMA_ID = C.CINEMA_ID
+			    	AND S.TIME_TYPE_ID = TI.TIME_TYPE_ID
+			    	AND S.SHOW_ID LIKE '%'||#{showId}||'%'
+			    ORDER BY
+			    	S.SHOW_ID ASC		
+		      ) SH
+		      , CINEMA_TYPE CI
+		WHERE
+		 	SH.CINEMA_TYPE_ID = CI.CINEMA_TYPE_ID   			     
+	 </sql>
+	 
+	 <select id="selectShowList" parameterType="showVo" resultMap="show">
+	    SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+					<include refid="showList" />
+				) A
+			)
+		WHERE 
+		ROWNUM <![CDATA[ <= ]]> #{pageSize}
+		AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+	 </select>
+	 
+	 <select id="showDetail" parameterType="showVo" resultMap="show">
+		SELECT 
+			S.*
+			, CI.CINEMA_TYPE_ID
+			, CI.CINEMA_TYPE_NM
+		FROM
+			    (
+		      SELECT 
+			    	S.SHOW_ID
+			    	,S.MOVIE_ID
+			    	,S.THEATER_ID
+			    	,S.CINEMA_ID
+			    	,S.TIME_TYPE_ID
+			    	,S.START_TIME
+			    	,S.SHOW_DATE
+			    	,M.MOVIE_NM
+			    	,T.THEATER_NM
+			    	,C.CINEMA_NM
+           			,C.CINEMA_TYPE_ID
+			    	,TI.TIME_TYPE_NM
+			    FROM
+			    	SHOW_INFO S
+			    	,MOVIE_INFO M
+			    	,THEATER_INFO T
+			    	,CINEMA_INFO C
+			    	,TIME_TYPE TI
+			    WHERE
+			    	S.MOVIE_ID = M.MOVIE_ID
+			    	AND S.THEATER_ID = T.THEATER_ID
+			    	AND S.CINEMA_ID = C.CINEMA_ID
+			    	AND S.TIME_TYPE_ID = TI.TIME_TYPE_ID
+			    	AND S.SHOW_ID = #{showId}		
+		      ) S
+		      , CINEMA_TYPE CI
+		WHERE
+		 	S.CINEMA_TYPE_ID = CI.CINEMA_TYPE_ID  
+	 </select>
+	 
+	 <select id="selectShowListCount" parameterType="showVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+		<include refid="showList" />
+			 )
+	</select>
+	
+	<select id="chkShowInfo" parameterType="showVo" resultType="int">
+	    SELECT COUNT(0)
+	    FROM SHOW_INFO
+	    WHERE
+	    	THEATER_ID = #{theaterId}
+	    	AND CINEMA_ID = #{cinemaId}
+	    	AND START_TIME = #{startTime}
+	    	AND SHOW_DATE = TO_CHAR(#{showDate})
+	</select>
+	
+	<insert id="showInsert">
+	    INSERT INTO SHOW_INFO
+	    	(
+	    	SHOW_ID
+	    	,MOVIE_ID
+	    	,THEATER_ID
+	    	,CINEMA_ID
+	    	,TIME_TYPE_ID
+	    	,START_TIME
+	    	,SHOW_DATE
+	    	)
+	    VALUES
+	    	(
+	    	#{showId}
+	    	,#{movieId}
+	    	,#{theaterId}
+	    	,#{cinemaId}
+	    	,#{timeTypeId}
+	    	,#{startTime}
+	    	,#{showDate}
+	    	)		    	
+	</insert>
+	
+	<update id="showModify">
+	    UPDATE SHOW_INFO
+	    SET
+	    	
+	    	MOVIE_ID = #{movieId}
+	    	,THEATER_ID = #{theaterId}
+	    	,CINEMA_ID = #{cinemaId}
+	    	,TIME_TYPE_ID = #{timeTypeId}
+	    	,START_TIME = #{startTime}
+	    	,SHOW_DATE = #{showDate}
+	    WHERE
+	    	SHOW_ID = #{showId}
+	</update>
+	
+	<delete id="showDelete">
+	    DELETE
+	    	SHOW_INFO
+	    WHERE
+	    	SHOW_ID = #{showId}
+	</delete>
+	
+		 
+	<select id = "selectBookList" parameterType="showVo" resultMap="show">
+		SELECT DISTINCT M.MOVIE_ID,M.MOVIE_NM, M.MOVIE_RATING
+		FROM 
+		MOVIE_INFO M, SHOW_INFO S
+		WHERE 
+		M.MOVIE_ID = S.MOVIE_ID 
+		AND M.MOVIE_SHOWING_YN = '상영 중'
+	</select> 
+	
+	<select id = "selectTheatersList" parameterType ="showVo" resultMap ="show">
+	    SELECT DISTINCT T.THEATER_ID,T.THEATER_NM
+		FROM 
+		MOVIE_INFO M, SHOW_INFO S,THEATER_INFO T
+		WHERE
+		M.MOVIE_ID = S.MOVIE_ID
+		AND S.THEATER_ID = T.THEATER_ID
+		AND M.MOVIE_SHOWING_YN = '상영 중'
+		AND M.MOVIE_NM = #{movieNm}
+	</select>
+	
+	
+	<select id ="selectDateList" parameterType= "showVo" resultMap="show">	    
+	    SELECT DISTINCT S.SHOW_DATE
+		FROM 
+		MOVIE_INFO M, SHOW_INFO S,THEATER_INFO T
+		WHERE
+		M.MOVIE_ID = S.MOVIE_ID
+		AND S.THEATER_ID = T.THEATER_ID
+		AND M.MOVIE_SHOWING_YN = '상영 중'
+		AND M.MOVIE_NM = #{movieNm}
+		AND T.THEATER_NM = #{theaterNm}    
+	</select>
+	
+	<select id = "selectTimeList" parameterType ="showVo" resultMap="show">	    
+	    SELECT S.START_TIME,C.CINEMA_NM
+		FROM 
+		MOVIE_INFO M, SHOW_INFO S,THEATER_INFO T,CINEMA_INFO C
+		WHERE
+		M.MOVIE_ID = S.MOVIE_ID
+		AND S.THEATER_ID = T.THEATER_ID
+		AND S.CINEMA_ID = C.CINEMA_ID  
+		AND M.MOVIE_SHOWING_YN = '상영 중'
+		AND M.MOVIE_NM = #{movieNm}
+		AND T.THEATER_NM =#{theaterNm}
+        AND S.SHOW_DATE = #{showDate}
+	</select>
+	
+	<select id="selectShowId" resultType="showVo" resultMap="show">
+	    SELECT 
+        	S.SHOW_ID
+	    FROM
+	    	SHOW_INFO S
+	    	,MOVIE_INFO M
+	    	,THEATER_INFO T
+	    	,CINEMA_INFO C
+	    WHERE 
+	    	S.MOVIE_ID = M.MOVIE_ID
+	    	AND S.THEATER_ID = T.THEATER_ID
+	    	AND S.CINEMA_ID = C.CINEMA_ID
+	    	AND M.MOVIE_NM = #{movieNm}
+	    	AND T.THEATER_NM = #{theaterNm}
+	    	AND C.CINEMA_NM = #{cinemaNm}
+	    	AND S.SHOW_DATE = #{showDate}
+        	AND S.START_TIME = #{startTime}
+	</select>
+	
+	<select id="selectPayInfo" parameterType="showVo" resultMap="show">
+	    SELECT S.TIME_TYPE_PRICE, CI.CINEMA_TYPE_PRICE
+		FROM
+		(
+			SELECT DISTINCT S.SHOW_ID, M.MOVIE_NM, T.THEATER_NM, C.CINEMA_NM,C.CINEMA_TYPE_ID, S.START_TIME, S.SHOW_DATE,TI.TIME_TYPE_NM, TI.TIME_TYPE_PRICE
+			FROM SHOW_INFO S, MOVIE_INFO M, THEATER_INFO T, CINEMA_INFO C, TIME_TYPE TI
+			WHERE 
+			S.MOVIE_ID = M.MOVIE_ID
+			AND S.THEATER_ID = T.THEATER_ID
+			AND S.CINEMA_ID = C.CINEMA_ID
+			AND S.TIME_TYPE_ID = TI.TIME_TYPE_ID
+		) S
+		,CINEMA_TYPE CI
+		WHERE 
+		S.CINEMA_TYPE_ID = CI.CINEMA_TYPE_ID
+		AND S.SHOW_ID = #{showId}
+	</select>
+	 
+</mapper>
+
+	 

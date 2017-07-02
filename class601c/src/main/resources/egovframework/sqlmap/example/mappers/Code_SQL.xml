@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="code">
+    
+    <resultMap id="codeMap" type="com.class601.vo.CodeVo">
+        <result property="mainCd"	column="MAIN_CODE"></result>
+        <result property="subCd"	column="SUB_CODE"></result>
+        <result property="mainCdNm"	column="MAIN_CODE_NM"></result>
+        <result property="subCdNm"	column="SUB_CODE_NM"></result>
+        <result property="useYn"	column="USE_YN"></result>
+    </resultMap>
+    
+    <select id="getCode" parameterType="String" resultMap="codeMap">
+        SELECT 
+        	MAIN_CODE
+        	,MAIN_CODE_NM
+        	,SUB_CODE
+        	,SUB_CODE_NM
+        	,USE_YN
+        FROM
+        	CODE_INFO
+        WHERE
+        	MAIN_CODE = #{mainCd}	
+    </select>
+    
+</mapper>

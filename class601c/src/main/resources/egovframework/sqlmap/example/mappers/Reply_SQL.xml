@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "Reply">
+    <resultMap id="reply" type="com.class601.vo.ReplyVo">
+        <result property="replyId" column="REPLY_ID"/>
+        <result property="replyGrade" column="REPLY_GRADE"/>
+        <result property="replyContent" column="REPLY_CONTENT"/>
+        <result property="userId" column="USER_ID"/>
+        <result property="movieId" column="MOVIE_ID"/>
+        <result property="movieNm" column="MOVIE_NM"/>
+    </resultMap>
+    
+    <sql id="replyList">
+        SELECT 
+        	R.REPLY_ID REPLY_ID
+        	 , R.REPLY_GRADE REPLY_GRADE
+        	 , R.REPLY_CONTENT REPLY_CONTENT
+        	 , R.USER_ID USER_ID
+        	 , R.MOVIE_ID MOVIE_ID
+        	 , M.MOVIE_NM MOVIE_NM
+        FROM 
+        	REPLY_INFO R
+        	,MOVIE_INFO M
+        	,USER_INFO U
+        WHERE 
+        	R.MOVIE_ID = M.MOVIE_ID
+        	AND R.USER_ID = U.USER_ID
+        	AND M.MOVIE_ID = #{movieId}
+        ORDER BY REPLY_ID DESC
+    </sql>
+    
+   	
+	<select id="replyGrade" parameterType="replyVo" resultMap="reply">
+	    SELECT MOVIE_ID, REPLY_GRADE
+			FROM 
+		(SELECT R.MOVIE_ID, R.reply_grade
+		FROM MOVIE_INFO M, REPLY_INFO R
+		WHERE M.MOVIE_ID = R.MOVIE_ID) 
+		WHERE MOVIE_ID = #{movieId}
+	</select>
+    
+    <select id="selectReplyList" parameterType="replyVo" resultMap="reply">
+	    SELECT *
+		FROM (
+			SELECT ROWNUM AS RN, A.*
+			FROM (
+					<include refid="replyList" />
+				) A
+			)
+		WHERE 
+		ROWNUM <![CDATA[ <= ]]> #{pageSize}
+		AND RN <![CDATA[ > ]]> (#{pageNo}-1)*#{pageSize}
+	 </select>
+    
+    
+    <select id="selectReplyListCount" parameterType="replyVo" resultType="int">
+		SELECT COUNT(0) totalCnt
+		FROM (
+		<include refid="replyList" />
+			 )
+	</select>
+    
+    
+    <insert id="replyInsert">
+	    INSERT INTO REPLY_INFO
+	    	(
+	    	REPLY_ID
+	      , REPLY_GRADE
+	      , REPLY_CONTENT
+	      , USER_ID
+	      , MOVIE_ID
+	    	)
+	    VALUES
+	    	(
+	       #{replyId}
+	      , #{replyGrade}
+	      , #{replyContent}
+	      , #{userId}
+	      , #{movieId}
+	    	)
+	       	
+	</insert>
+ 
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+

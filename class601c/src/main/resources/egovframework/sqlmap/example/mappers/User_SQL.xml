@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userInfo">
+
+
+	<resultMap id="userInfo" type="com.class601.vo.UserVo">
+		<result property="userId" column="USER_ID" />
+		<result property="userPassword" column="USER_PASSWORD" />
+		<result property="userPasswordHint" column="USER_PASSWORD_HINT" />
+		<result property="userPasswordAnswer" column="USER_PASSWORD_ANSWER" />
+		<result property="userNm" column="USER_NM" />
+		<result property="userEmail" column="USER_EMAIL" />
+		<result property="userBirthDate" column="USER_BIRTH_DATE"/>
+		<result property="userGender" column="USER_GENDER" />
+		<result property="userMobileCarrier" column="USER_MOBILE_CARRIER"/>
+		<result property="userCellphone" column="USER_CELLPHONE" />
+		<result property="userRating" column="USER_RATING" />
+		<result property="userPerformance" column="USER_PERFORMANCE" />
+
+	</resultMap>
+
+		<sql id="chkId">
+	    SELECT USER_ID
+USER_PASSWORD
+,USER_PASSWORD_HINT
+,USER_PASSWORD_ANSWER
+,USER_NM
+,USER_EMAIL
+,USER_BIRTH_DATE
+,USER_GENDER
+,USER_MOBILE_CARRIER
+,USER_CELLPHONE
+,USER_RATING
+,USER_PERFORMANCE
+		FROM USER_INFO
+		WHERE USER_ID LIKE '%'||#{userId}||'%'
+		ORDER BY USER_ID DESC	    	    
+	</sql>
+		
+		
+		
+
+	<select id="chkId" parameterType="userVo" resultType="int">
+	SELECT COUNT(0) 
+	FROM USER_INFO 
+	WHERE USER_ID = #{userId} 
+	</select>
+
+
+	<insert id="userInsert">
+		INSERT INTO USER_INFO(
+        USER_ID
+		,USER_PASSWORD
+		,USER_PASSWORD_HINT
+		,USER_PASSWORD_ANSWER
+		,USER_NM
+		,USER_EMAIL
+		,USER_BIRTH_DATE
+		,USER_GENDER
+		,USER_MOBILE_CARRIER
+		,USER_CELLPHONE
+		,USER_RATING
+		,USER_PERFORMANCE
+		)
+		VALUES(
+		#{userId},
+		#{userPassword},
+		#{userPasswordHint},
+		#{userPasswordAnswer},
+		#{userNm},
+		#{userEmail},
+		#{userBirthDate},
+		#{userGender},
+		#{userMobileCarrier},
+		#{userCellphone},
+		#{userRating},
+		#{userPerformance}
+		)
+	</insert>
+
+
+
+</mapper>
